@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminHomePageController;
+use App\Http\Controllers\Admin\AdminJobCategoryController;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Front\HomeController;
@@ -21,6 +22,7 @@ Route::get('/admin/reset-password/{token}/{email}', [AdminLoginController::class
 Route::post('/admin/reset-password-submit', [AdminLoginController::class, 'reset_password_submit'])->name('admin_reset_password_submit');
 
 Route::middleware(['admin:admin'])->group(function () {
+    // Profile
     Route::get('/admin/home', [AdminHomeController::class, 'index'])
         ->name('admin_home');
     Route::get('/admin/edit-profile', [AdminProfileController::class, 'index'])
@@ -31,4 +33,17 @@ Route::middleware(['admin:admin'])->group(function () {
         ->name('admin_home_page');
     Route::post('/admin/home-page/update', [AdminHomePageController::class, 'update'])
         ->name('admin_home_page_update');
+    // Job category
+    Route::get('/admin/job-category/view', [AdminJobCategoryController::class, 'index'])
+        ->name('admin_job_category');
+    Route::get('/admin/job-category/add', [AdminJobCategoryController::class, 'add_section'])
+        ->name('admin_job_category_add');
+    Route::post('/admin/job-category/store', [AdminJobCategoryController::class, 'store'])
+        ->name('admin_job_category_store');
+    Route::get('/admin/job-category/edit/{id}', [AdminJobCategoryController::class, 'edit'])
+        ->name('admin_job_category_edit');
+    Route::post('/admin/job-category/update{id}/', [AdminJobCategoryController::class, 'update'])
+        ->name('admin_job_category_update');
+    Route::get('/admin/job-category/delete/{id}', [AdminJobCategoryController::class, 'delete'])
+        ->name('admin_job_category_delete');
 });

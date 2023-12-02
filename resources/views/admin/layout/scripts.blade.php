@@ -13,7 +13,7 @@
     <script src="{{ asset('dist/js/summernote-bs4.js') }}"></script>
     <script src="{{ asset('dist/js/jquery.dataTables.min.js') }}"></script>
     <script src="{{ asset('dist/js/dataTables.bootstrap4.min.js') }}"></script>
-    <script src="{{ asset('dist/js/iziToast.min.js') }}"></script>
+    <script src="{{ asset('dist/js/iziToast.min.js') }}"></script> 
     <script src="{{ asset('dist/js/fontawesome-iconpicker.js') }}"></script>
     <script src="{{ asset('dist/js/bootstrap4-toggle.min.js') }}"></script>
 
