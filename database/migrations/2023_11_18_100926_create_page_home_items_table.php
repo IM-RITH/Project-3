@@ -22,6 +22,9 @@ return new class extends Migration
             $table->text('job_location');
             $table->text('search');
             $table->text('background');
+            $table->text('job_category_main_heading');
+            $table->text('job_bcategory_sub_heading')->nullable();
+            $table->text('job_category_status');
             $table->timestamps();
         });
     }
