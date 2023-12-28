@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminContactPageController;
 use App\Http\Controllers\Admin\AdminFaqController;
 use App\Http\Controllers\Admin\AdminFaqPageController;
 use App\Http\Controllers\Admin\AdminHomeController;
@@ -10,6 +11,7 @@ use App\Http\Controllers\Admin\AdminPrivacyPageController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminTermPageController;
 use App\Http\Controllers\Admin\AdminWhyChooseController;
+use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\FaqController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\JobCategoryController;
@@ -22,6 +24,9 @@ Route::get('terms', [TermsController::class, 'index'])->name('terms');
 Route::get('job-categories', [JobCategoryController::class, 'categories'])->name('job_categories');
 Route::get('faq', [FaqController::class, 'index'])->name('faq');
 Route::get('privacy-policy', [PrivacyController::class, 'index'])->name('privacy');
+Route::get('contact-us', [ContactController::class, 'index'])->name('contact');
+Route::post('contact-submit', [ContactController::class, 'submit'])->name('contact_submit');
+
 
 /*Admin route*/
 Route::get('/admin/login', [AdminLoginController::class, 'index'])->name('admin_login');
@@ -33,7 +38,7 @@ Route::get('/admin/reset-password/{token}/{email}', [AdminLoginController::class
 Route::post('/admin/reset-password-submit', [AdminLoginController::class, 'reset_password_submit'])->name('admin_reset_password_submit');
 
 Route::middleware(['admin:admin'])->group(function () {
-    // Profile
+
     Route::get('/admin/home', [AdminHomeController::class, 'index'])
         ->name('admin_home');
     Route::get('/admin/edit-profile', [AdminProfileController::class, 'index'])
@@ -56,6 +61,12 @@ Route::middleware(['admin:admin'])->group(function () {
         ->name('admin_privacy_page');
     Route::post('/admin/privacy-page/update', [AdminPrivacyPageController::class, 'update'])
         ->name('admin_privacy_page_update');
+    // contact route
+    Route::get('/admin/contact-page', [AdminContactPageController::class, 'index'])
+        ->name('admin_contact_page');
+    Route::post('/admin/contact-page/update', [AdminContactPageController::class, 'update'])
+        ->name('admin_contact_page_update');
+
     // Job category
     Route::get('/admin/job-category/view', [AdminJobCategoryController::class, 'index'])
         ->name('admin_job_category');

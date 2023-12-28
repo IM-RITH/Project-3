@@ -15,7 +15,7 @@
                 </a>
             </li>
             <li
-                class="nav-item dropdown {{ Request::is('admin/home-page') || Request::is('admin/faq-page') || Request::is('admin/privacy-page') ? 'active' : '' }}">
+                class="nav-item dropdown {{ Request::is('admin/home-page') || Request::is('admin/faq-page') || Request::is('admin/privacy-page') || Request::is('admin/contact-page') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-hand-point-right"></i><span>Page
                         Settings</span></a>
                 <ul class="dropdown-menu">
@@ -30,6 +30,9 @@
                     </li>
                     <li class="{{ Request::is('admin/privacy-page') ? 'active' : '' }}"><a class="nav-link"
                             href="{{ route('admin_privacy_page') }}"><i class="fas fa-angle-right"></i>PRIVACY</a>
+                    </li>
+                    <li class="{{ Request::is('admin/contact-page') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('admin_contact_page') }}"><i class="fas fa-angle-right"></i>CONTACt</a>
                     </li>
                 </ul>
             </li>
