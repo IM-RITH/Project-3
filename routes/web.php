@@ -6,15 +6,19 @@ use App\Http\Controllers\Admin\AdminFaqPageController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminHomePageController;
 use App\Http\Controllers\Admin\AdminJobCategoryController;
+use App\Http\Controllers\Admin\AdminJobCategoryPageController;
 use App\Http\Controllers\Admin\AdminLoginController;
 use App\Http\Controllers\Admin\AdminPrivacyPageController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminTermPageController;
 use App\Http\Controllers\Admin\AdminWhyChooseController;
+use App\Http\Controllers\Admin\AdminPackageController;
+use App\Http\Controllers\Admin\AdminPricingPageController;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\FaqController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\JobCategoryController;
+use App\Http\Controllers\Front\PricingController;
 use App\Http\Controllers\Front\PrivacyController;
 use App\Http\Controllers\Front\TermsController;
 use Illuminate\Support\Facades\Route;
@@ -24,8 +28,9 @@ Route::get('terms', [TermsController::class, 'index'])->name('terms');
 Route::get('job-categories', [JobCategoryController::class, 'categories'])->name('job_categories');
 Route::get('faq', [FaqController::class, 'index'])->name('faq');
 Route::get('privacy-policy', [PrivacyController::class, 'index'])->name('privacy');
-Route::get('contact-us', [ContactController::class, 'index'])->name('contact');
+Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::post('contact-submit', [ContactController::class, 'submit'])->name('contact_submit');
+Route::get('pricing', [PricingController::class, 'index'])->name('pricing');
 
 
 /*Admin route*/
@@ -66,6 +71,17 @@ Route::middleware(['admin:admin'])->group(function () {
         ->name('admin_contact_page');
     Route::post('/admin/contact-page/update', [AdminContactPageController::class, 'update'])
         ->name('admin_contact_page_update');
+    // job category page
+    Route::get('/admin/job-category-page', [AdminJobCategoryPageController::class, 'index'])
+        ->name('admin_job_category_page');
+    Route::post('/admin/job-category-page/update', [AdminJobCategoryPageController::class, 'update'])
+        ->name('admin_job_category_page_update');
+    // pricing
+    Route::get('/admin/pricing-page', [AdminPricingPageController::class, 'index'])
+        ->name('admin_pricing_page');
+    Route::post('/admin/pricing-page/update', [AdminPricingPageController::class, 'update'])
+        ->name('admin_pricing_page_update');
+
 
     // Job category
     Route::get('/admin/job-category/view', [AdminJobCategoryController::class, 'index'])
@@ -80,6 +96,8 @@ Route::middleware(['admin:admin'])->group(function () {
         ->name('admin_job_category_update');
     Route::get('/admin/job-category/delete/{id}', [AdminJobCategoryController::class, 'delete'])
         ->name('admin_job_category_delete');
+
+
 
     // Why choose
     Route::get('/admin/why-choose/view', [AdminWhyChooseController::class, 'index'])
@@ -108,4 +126,18 @@ Route::middleware(['admin:admin'])->group(function () {
         ->name('admin_faq_item_update');
     Route::get('/admin/faq/delete/{id}', [AdminFaqController::class, 'delete'])
         ->name('admin_faq_item_delete');
+
+    // Package
+    Route::get('/admin/package/view', [AdminPackageController::class, 'index'])
+        ->name('admin_package');
+    Route::get('/admin/package/add', [AdminPackageController::class, 'add_section'])
+        ->name('admin_package_item_add');
+    Route::post('/admin/package/store', [AdminPackageController::class, 'store'])
+        ->name('admin_package_item_store');
+    Route::get('/admin/package/edit/{id}', [AdminPackageController::class, 'edit'])
+        ->name('admin_package_item_edit');
+    Route::post('/admin/package/update{id}/', [AdminPackageController::class, 'update'])
+        ->name('admin_package_item_update');
+    Route::get('/admin/package/delete/{id}', [AdminPackageController::class, 'delete'])
+        ->name('admin_package_item_delete');
 });

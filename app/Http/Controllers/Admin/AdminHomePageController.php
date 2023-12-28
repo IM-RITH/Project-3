@@ -86,6 +86,9 @@ class AdminHomePageController extends Controller
         $home_page_data->feature_jobs_heading = $request->feature_jobs_heading;
         $home_page_data->feature_jobs_subheading = $request->feature_jobs_subheading;
         $home_page_data->feature_jobs_status = $request->feature_jobs_status;
+
+        $home_page_data->title = $request->title;
+        $home_page_data->meta_description = $request->meta_description;
         $home_page_data->update();
         return redirect()->back()->with('success', ' Information Updated Successfully');
     }

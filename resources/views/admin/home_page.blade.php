@@ -24,6 +24,9 @@
                                         <button class="nav-link" id="v-pills-4-tab" data-bs-toggle="pill"
                                             data-bs-target="#v-pills-4" type="button" role="tab"
                                             aria-controls="v-pills-4" aria-selected="false">Feature jobs</button>
+                                        <button class="nav-link" id="v-pills-5-tab" data-bs-toggle="pill"
+                                            data-bs-target="#v-pills-5" type="button" role="tab"
+                                            aria-controls="v-pills-5" aria-selected="false">SEO Section</button>
                                     </div>
                                 </div>
                                 <div class="col-lg-9 col-md-12">
@@ -200,6 +203,23 @@
                                                                 @if ($home_page_data->feature_jobs_status == 'Hide') selected @endif>Hide
                                                             </option>
                                                         </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- SEO Section --}}
+                                        <div class="tab-pane fade" id="v-pills-5" role="tabpanel"
+                                            aria-labelledby="v-pills-5-tab" tabindex="0">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Title</label>
+                                                        <input type="text" class="form-control" name="title"
+                                                            value="{{ $home_page_data->title }}">
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Meta Description</label>
+                                                        <textarea name="meta_description" class="form-control" cols="30" rows="10">{{ $home_page_data->meta_description }}</textarea>
                                                     </div>
                                                 </div>
                                             </div>
