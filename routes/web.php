@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\AdminHomePageController;
 use App\Http\Controllers\Admin\AdminJobCategoryController;
 use App\Http\Controllers\Admin\AdminJobCategoryPageController;
 use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\Admin\AdminOtherPageController;
 use App\Http\Controllers\Admin\AdminPrivacyPageController;
 use App\Http\Controllers\Admin\AdminProfileController;
 use App\Http\Controllers\Admin\AdminTermPageController;
@@ -16,10 +17,13 @@ use App\Http\Controllers\Admin\AdminPackageController;
 use App\Http\Controllers\Admin\AdminPricingPageController;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\FaqController;
+use App\Http\Controllers\Front\ForgetPasswordController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\JobCategoryController;
+use App\Http\Controllers\Front\LoginController;
 use App\Http\Controllers\Front\PricingController;
 use App\Http\Controllers\Front\PrivacyController;
+use App\Http\Controllers\Front\SignupController;
 use App\Http\Controllers\Front\TermsController;
 use Illuminate\Support\Facades\Route;
 
@@ -31,7 +35,9 @@ Route::get('privacy-policy', [PrivacyController::class, 'index'])->name('privacy
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::post('contact-submit', [ContactController::class, 'submit'])->name('contact_submit');
 Route::get('pricing', [PricingController::class, 'index'])->name('pricing');
-
+Route::get('login', [LoginController::class, 'index'])->name('login');
+Route::get('signup', [SignupController::class, 'index'])->name('signup');
+Route::get('forget-password', [ForgetPasswordController::class, 'index'])->name('forget_password');
 
 /*Admin route*/
 Route::get('/admin/login', [AdminLoginController::class, 'index'])->name('admin_login');
@@ -81,6 +87,11 @@ Route::middleware(['admin:admin'])->group(function () {
         ->name('admin_pricing_page');
     Route::post('/admin/pricing-page/update', [AdminPricingPageController::class, 'update'])
         ->name('admin_pricing_page_update');
+    // others
+    Route::get('/admin/other-page', [AdminOtherPageController::class, 'index'])
+        ->name('admin_other_page');
+    Route::post('/admin/other-page/update', [AdminOtherPageController::class, 'update'])
+        ->name('admin_other_page_update');
 
 
     // Job category
