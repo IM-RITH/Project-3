@@ -14,14 +14,22 @@
                     <span>Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item dropdown {{ Request::is('admin/home-page') ? 'active' : '' }}">
+            <li
+                class="nav-item dropdown {{ Request::is('admin/home-page') || Request::is('admin/faq-page') || Request::is('admin/privacy-page') ? 'active' : '' }}">
                 <a href="#" class="nav-link has-dropdown"><i class="fas fa-hand-point-right"></i><span>Page
                         Settings</span></a>
                 <ul class="dropdown-menu">
                     <li class="{{ Request::is('admin/home-page') ? 'active' : '' }}"><a class="nav-link"
                             href="{{ route('admin_home_page') }}"><i class="fas fa-angle-right"></i>Home</a>
                     </li>
-                    <li class=""><a class="nav-link" href=""><i class="fas fa-angle-right"></i>Terms</a>
+                    <li class="{{ Request::is('admin/faq-page') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('admin_faq_page') }}"><i class="fas fa-angle-right"></i>FAQ</a>
+                    </li>
+                    <li class="{{ Request::is('admin/term-page') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('admin_term_page') }}"><i class="fas fa-angle-right"></i>TERMS</a>
+                    </li>
+                    <li class="{{ Request::is('admin/privacy-page') ? 'active' : '' }}"><a class="nav-link"
+                            href="{{ route('admin_privacy_page') }}"><i class="fas fa-angle-right"></i>PRIVACY</a>
                     </li>
                 </ul>
             </li>
@@ -38,8 +46,15 @@
                     </li>
                 </ul>
             </li>
-            <li class="{{ Request::is('admin/why-choose/*') ? 'active' : '' }}"><a class="nav-link" href="{{ route('admin_why_choose_item') }}"data-bs-toggle="tooltip" data-bs-placement="right"
-                    data-bs-title="Why Choose Items"><i class="fas fa-hand-point-right"></i> <span>Why Choose Items</span></a></li>
+            <li class="{{ Request::is('admin/why-choose/*') ? 'active' : '' }}"><a class="nav-link"
+                    href="{{ route('admin_why_choose_item') }}"data-bs-toggle="tooltip" data-bs-placement="right"
+                    data-bs-title="Why Choose Items"><i class="fas fa-hand-point-right"></i> <span>Why Choose
+                        Items</span></a>
+            </li>
+            <li class="{{ Request::is('admin/faq/*') ? 'active' : '' }}"><a class="nav-link"
+                    href="{{ route('admin_faq') }}"data-bs-toggle="tooltip" data-bs-placement="right"
+                    data-bs-title="FAQs"><i class="fas fa-hand-point-right"></i> <span>FAQ</span></a>
+            </li>
         </ul>
     </aside>
 </div>

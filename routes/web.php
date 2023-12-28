@@ -1,19 +1,27 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminFaqController;
+use App\Http\Controllers\Admin\AdminFaqPageController;
 use App\Http\Controllers\Admin\AdminHomeController;
 use App\Http\Controllers\Admin\AdminHomePageController;
 use App\Http\Controllers\Admin\AdminJobCategoryController;
 use App\Http\Controllers\Admin\AdminLoginController;
+use App\Http\Controllers\Admin\AdminPrivacyPageController;
 use App\Http\Controllers\Admin\AdminProfileController;
+use App\Http\Controllers\Admin\AdminTermPageController;
 use App\Http\Controllers\Admin\AdminWhyChooseController;
+use App\Http\Controllers\Front\FaqController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\JobCategoryController;
+use App\Http\Controllers\Front\PrivacyController;
 use App\Http\Controllers\Front\TermsController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('terms', [TermsController::class, 'index'])->name('terms');
 Route::get('job-categories', [JobCategoryController::class, 'categories'])->name('job_categories');
+Route::get('faq', [FaqController::class, 'index'])->name('faq');
+Route::get('privacy-policy', [PrivacyController::class, 'index'])->name('privacy');
 
 /*Admin route*/
 Route::get('/admin/login', [AdminLoginController::class, 'index'])->name('admin_login');
@@ -36,6 +44,18 @@ Route::middleware(['admin:admin'])->group(function () {
         ->name('admin_home_page');
     Route::post('/admin/home-page/update', [AdminHomePageController::class, 'update'])
         ->name('admin_home_page_update');
+    Route::get('/admin/faq-page', [AdminFaqPageController::class, 'index'])
+        ->name('admin_faq_page');
+    Route::post('/admin/faq-page/update', [AdminFaqPageController::class, 'update'])
+        ->name('admin_faq_page_update');
+    Route::get('/admin/term-page', [AdminTermPageController::class, 'index'])
+        ->name('admin_term_page');
+    Route::post('/admin/term-page/update', [AdminTermPageController::class, 'update'])
+        ->name('admin_term_page_update');
+    Route::get('/admin/privacy-page', [AdminPrivacyPageController::class, 'index'])
+        ->name('admin_privacy_page');
+    Route::post('/admin/privacy-page/update', [AdminPrivacyPageController::class, 'update'])
+        ->name('admin_privacy_page_update');
     // Job category
     Route::get('/admin/job-category/view', [AdminJobCategoryController::class, 'index'])
         ->name('admin_job_category');
@@ -63,4 +83,18 @@ Route::middleware(['admin:admin'])->group(function () {
         ->name('admin_why_choose_item_update');
     Route::get('/admin/why-choose/delete/{id}', [AdminWhyChooseController::class, 'delete'])
         ->name('admin_why_choose_item_delete');
+
+    // FAQ
+    Route::get('/admin/faq/view', [AdminFaqController::class, 'index'])
+        ->name('admin_faq');
+    Route::get('/admin/faq/add', [AdminFaqController::class, 'add_section'])
+        ->name('admin_faq_item_add');
+    Route::post('/admin/faq/store', [AdminFaqController::class, 'store'])
+        ->name('admin_faq_item_store');
+    Route::get('/admin/faq/edit/{id}', [AdminFaqController::class, 'edit'])
+        ->name('admin_faq_item_edit');
+    Route::post('/admin/faq/update{id}/', [AdminFaqController::class, 'update'])
+        ->name('admin_faq_item_update');
+    Route::get('/admin/faq/delete/{id}', [AdminFaqController::class, 'delete'])
+        ->name('admin_faq_item_delete');
 });

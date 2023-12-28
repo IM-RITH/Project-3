@@ -119,230 +119,238 @@
             </div>
         </div>
     @endif
-    <div class="why-choose" style="background-image: url({{ asset('uploads/banner3.jpg') }})">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="heading">
-                        <h2>Why Choose Us</h2>
-                        <p>
-                            Our Methods to help you build your career in
-                            future
-                        </p>
+
+    @if ($home_page_data->why_choose_status == 'Show')
+        <div class="why-choose"
+            style="background-image: url({{ asset('uploads/' . $home_page_data->why_choose_background) }})">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="heading">
+                            <h2>{{ $home_page_data->why_choose_heading }}</h2>
+                            <p>
+                                {{ $home_page_data->why_choose_subheading }}
+                            </p>
+                        </div>
                     </div>
                 </div>
+                <div class="row">
+                    @foreach ($why_choose_item as $item)
+                        <div class="col-md-4">
+                            <div class="inner">
+                                <div class="icon">
+                                    <i class="{{ $item->icon }}"></i>
+                                </div>
+                                <div class="text">
+                                    <h2>{{ $item->heading }}</h2>
+                                    <p>
+                                        {{-- nl2 ==> to show multi lines --}}
+                                        {!! nl2br($item->text) !!}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
             </div>
-            <div class="row">
-                @foreach ($why_choose_item as $item)
-                    <div class="col-md-4">
-                        <div class="inner">
-                            <div class="icon">
-                                <i class="{{ $item->icon }}"></i>
+        </div>
+    @endif
+
+    @if ($home_page_data->feature_jobs_status == 'Show')
+        <div class="job">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="heading">
+                            <h2>{{ $home_page_data->feature_jobs_heading }}</h2>
+                            <p>{{ $home_page_data->feature_jobs_subheading }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-lg-6 col-md-12">
+                        <div class="item d-flex justify-content-start">
+                            <div class="logo">
+                                <img src="{{ asset('uploads/logo1.png') }}" alt="" />
                             </div>
                             <div class="text">
-                                <h2>{{ $item->heading }}</h2>
-                                <p>
-                                    {{-- nl2 ==> to show multi lines --}}
-                                    {!! nl2br($item->text) !!} 
-                                </p>
+                                <h3>
+                                    <a href="job.html">Software Engineer, Google</a>
+                                </h3>
+                                <div class="detail-1 d-flex justify-content-start">
+                                    <div class="category">Web Development</div>
+                                    <div class="location">United States</div>
+                                </div>
+                                <div class="detail-2 d-flex justify-content-start">
+                                    <div class="date">3 days ago</div>
+                                    <div class="budget">$300-$600</div>
+                                    <div class="expired">Expired</div>
+                                </div>
+                                <div class="special d-flex justify-content-start">
+                                    <div class="featured">Featured</div>
+                                    <div class="type">Full Time</div>
+                                    <div class="urgent">Urgent</div>
+                                </div>
+                                <div class="bookmark">
+                                    <a href=""><i class="fas fa-bookmark active"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                @endforeach
-            </div>
-        </div>
-    </div>
-    <div class="job">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="heading">
-                        <h2>Featured Jobs</h2>
-                        <p>Find the awesome jobs that matches your skill</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-12">
-                    <div class="item d-flex justify-content-start">
-                        <div class="logo">
-                            <img src="{{ asset('uploads/logo1.png') }}" alt="" />
-                        </div>
-                        <div class="text">
-                            <h3>
-                                <a href="job.html">Software Engineer, Google</a>
-                            </h3>
-                            <div class="detail-1 d-flex justify-content-start">
-                                <div class="category">Web Development</div>
-                                <div class="location">United States</div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="item d-flex justify-content-start">
+                            <div class="logo">
+                                <img src="{{ asset('uploads/logo2.png') }}" alt="" />
                             </div>
-                            <div class="detail-2 d-flex justify-content-start">
-                                <div class="date">3 days ago</div>
-                                <div class="budget">$300-$600</div>
-                                <div class="expired">Expired</div>
-                            </div>
-                            <div class="special d-flex justify-content-start">
-                                <div class="featured">Featured</div>
-                                <div class="type">Full Time</div>
-                                <div class="urgent">Urgent</div>
-                            </div>
-                            <div class="bookmark">
-                                <a href=""><i class="fas fa-bookmark active"></i></a>
+                            <div class="text">
+                                <h3>
+                                    <a href="job.html">Web Designer, Amplify</a>
+                                </h3>
+                                <div class="detail-1 d-flex justify-content-start">
+                                    <div class="category">Web Development</div>
+                                    <div class="location">United States</div>
+                                </div>
+                                <div class="detail-2 d-flex justify-content-start">
+                                    <div class="date">1 day ago</div>
+                                    <div class="budget">$1000</div>
+                                </div>
+                                <div class="special d-flex justify-content-start">
+                                    <div class="featured">Featured</div>
+                                    <div class="type">Part Time</div>
+                                </div>
+                                <div class="bookmark">
+                                    <a href=""><i class="fas fa-bookmark"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="item d-flex justify-content-start">
-                        <div class="logo">
-                            <img src="{{ asset('uploads/logo2.png') }}" alt="" />
-                        </div>
-                        <div class="text">
-                            <h3>
-                                <a href="job.html">Web Designer, Amplify</a>
-                            </h3>
-                            <div class="detail-1 d-flex justify-content-start">
-                                <div class="category">Web Development</div>
-                                <div class="location">United States</div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="item d-flex justify-content-start">
+                            <div class="logo">
+                                <img src="{{ asset('uploads/logo3.png') }}" alt="" />
                             </div>
-                            <div class="detail-2 d-flex justify-content-start">
-                                <div class="date">1 day ago</div>
-                                <div class="budget">$1000</div>
-                            </div>
-                            <div class="special d-flex justify-content-start">
-                                <div class="featured">Featured</div>
-                                <div class="type">Part Time</div>
-                            </div>
-                            <div class="bookmark">
-                                <a href=""><i class="fas fa-bookmark"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="item d-flex justify-content-start">
-                        <div class="logo">
-                            <img src="{{ asset('uploads/logo3.png') }}" alt="" />
-                        </div>
-                        <div class="text">
-                            <h3>
-                                <a href="job.html">Laravel Developer, Gimpo</a>
-                            </h3>
-                            <div class="detail-1 d-flex justify-content-start">
-                                <div class="category">Web Development</div>
-                                <div class="location">Canada</div>
-                            </div>
-                            <div class="detail-2 d-flex justify-content-start">
-                                <div class="date">2 days ago</div>
-                                <div class="budget">$1000-$3000</div>
-                            </div>
-                            <div class="special d-flex justify-content-start">
-                                <div class="featured">Featured</div>
-                                <div class="type">Full Time</div>
-                                <div class="urgent">Urgent</div>
-                            </div>
-                            <div class="bookmark">
-                                <a href=""><i class="fas fa-bookmark"></i></a>
+                            <div class="text">
+                                <h3>
+                                    <a href="job.html">Laravel Developer, Gimpo</a>
+                                </h3>
+                                <div class="detail-1 d-flex justify-content-start">
+                                    <div class="category">Web Development</div>
+                                    <div class="location">Canada</div>
+                                </div>
+                                <div class="detail-2 d-flex justify-content-start">
+                                    <div class="date">2 days ago</div>
+                                    <div class="budget">$1000-$3000</div>
+                                </div>
+                                <div class="special d-flex justify-content-start">
+                                    <div class="featured">Featured</div>
+                                    <div class="type">Full Time</div>
+                                    <div class="urgent">Urgent</div>
+                                </div>
+                                <div class="bookmark">
+                                    <a href=""><i class="fas fa-bookmark"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="item d-flex justify-content-start">
-                        <div class="logo">
-                            <img src="{{ asset('uploads/logo4.png') }}" alt="" />
-                        </div>
-                        <div class="text">
-                            <h3>
-                                <a href="job.html">PHP Developer, Kite Solution</a>
-                            </h3>
-                            <div class="detail-1 d-flex justify-content-start">
-                                <div class="category">Web Development</div>
-                                <div class="location">Australia</div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="item d-flex justify-content-start">
+                            <div class="logo">
+                                <img src="{{ asset('uploads/logo4.png') }}" alt="" />
                             </div>
-                            <div class="detail-2 d-flex justify-content-start">
-                                <div class="date">7 hours ago</div>
-                                <div class="budget">$1800</div>
-                            </div>
-                            <div class="special d-flex justify-content-start">
-                                <div class="featured">Featured</div>
-                                <div class="type">Full Time</div>
-                                <div class="urgent">Urgent</div>
-                            </div>
-                            <div class="bookmark">
-                                <a href=""><i class="fas fa-bookmark"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="item d-flex justify-content-start">
-                        <div class="logo">
-                            <img src="{{ asset('uploads/logo5.png') }}" alt="" />
-                        </div>
-                        <div class="text">
-                            <h3>
-                                <a href="job.html">Junior Accountant, ABC Media</a>
-                            </h3>
-                            <div class="detail-1 d-flex justify-content-start">
-                                <div class="category">Marketing</div>
-                                <div class="location">Canada</div>
-                            </div>
-                            <div class="detail-2 d-flex justify-content-start">
-                                <div class="date">2 hours ago</div>
-                                <div class="budget">$400</div>
-                            </div>
-                            <div class="special d-flex justify-content-start">
-                                <div class="featured">Featured</div>
-                                <div class="type">Part Time</div>
-                                <div class="urgent">Urgent</div>
-                            </div>
-                            <div class="bookmark">
-                                <a href=""><i class="fas fa-bookmark"></i></a>
+                            <div class="text">
+                                <h3>
+                                    <a href="job.html">PHP Developer, Kite Solution</a>
+                                </h3>
+                                <div class="detail-1 d-flex justify-content-start">
+                                    <div class="category">Web Development</div>
+                                    <div class="location">Australia</div>
+                                </div>
+                                <div class="detail-2 d-flex justify-content-start">
+                                    <div class="date">7 hours ago</div>
+                                    <div class="budget">$1800</div>
+                                </div>
+                                <div class="special d-flex justify-content-start">
+                                    <div class="featured">Featured</div>
+                                    <div class="type">Full Time</div>
+                                    <div class="urgent">Urgent</div>
+                                </div>
+                                <div class="bookmark">
+                                    <a href=""><i class="fas fa-bookmark"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="col-lg-6 col-md-12">
-                    <div class="item d-flex justify-content-start">
-                        <div class="logo">
-                            <img src="{{ asset('uploads/logo6.png') }}" alt="" />
+                    <div class="col-lg-6 col-md-12">
+                        <div class="item d-flex justify-content-start">
+                            <div class="logo">
+                                <img src="{{ asset('uploads/logo5.png') }}" alt="" />
+                            </div>
+                            <div class="text">
+                                <h3>
+                                    <a href="job.html">Junior Accountant, ABC Media</a>
+                                </h3>
+                                <div class="detail-1 d-flex justify-content-start">
+                                    <div class="category">Marketing</div>
+                                    <div class="location">Canada</div>
+                                </div>
+                                <div class="detail-2 d-flex justify-content-start">
+                                    <div class="date">2 hours ago</div>
+                                    <div class="budget">$400</div>
+                                </div>
+                                <div class="special d-flex justify-content-start">
+                                    <div class="featured">Featured</div>
+                                    <div class="type">Part Time</div>
+                                    <div class="urgent">Urgent</div>
+                                </div>
+                                <div class="bookmark">
+                                    <a href=""><i class="fas fa-bookmark"></i></a>
+                                </div>
+                            </div>
                         </div>
-                        <div class="text">
-                            <h3>
-                                <a href="job.html">Sales Manager, Tingshu Limited</a>
-                            </h3>
-                            <div class="detail-1 d-flex justify-content-start">
-                                <div class="category">Marketing</div>
-                                <div class="location">Canada</div>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="item d-flex justify-content-start">
+                            <div class="logo">
+                                <img src="{{ asset('uploads/logo6.png') }}" alt="" />
                             </div>
-                            <div class="detail-2 d-flex justify-content-start">
-                                <div class="date">9 hours ago</div>
-                                <div class="budget">$600-$800</div>
-                            </div>
-                            <div class="special d-flex justify-content-start">
-                                <div class="featured">Featured</div>
-                                <div class="type">Full Time</div>
-                                <div class="urgent">Urgent</div>
-                            </div>
-                            <div class="bookmark">
-                                <a href=""><i class="fas fa-bookmark"></i></a>
+                            <div class="text">
+                                <h3>
+                                    <a href="job.html">Sales Manager, Tingshu Limited</a>
+                                </h3>
+                                <div class="detail-1 d-flex justify-content-start">
+                                    <div class="category">Marketing</div>
+                                    <div class="location">Canada</div>
+                                </div>
+                                <div class="detail-2 d-flex justify-content-start">
+                                    <div class="date">9 hours ago</div>
+                                    <div class="budget">$600-$800</div>
+                                </div>
+                                <div class="special d-flex justify-content-start">
+                                    <div class="featured">Featured</div>
+                                    <div class="type">Full Time</div>
+                                    <div class="urgent">Urgent</div>
+                                </div>
+                                <div class="bookmark">
+                                    <a href=""><i class="fas fa-bookmark"></i></a>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="all">
-                        <a href="jobs.html" class="btn btn-primary">See All Jobs</a>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="all">
+                            <a href="jobs.html" class="btn btn-primary">See All Jobs</a>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
 
-    <div class="testimonial" style="background-image: url({{ asset('uploads/banner11.jpg') }})">
+
+    {{-- our happy client --}}
+    {{-- <div class="testimonial" style="background-image: url({{ asset('uploads/banner11.jpg') }})">
         <div class="bg"></div>
         <div class="container">
             <div class="row">
@@ -397,8 +405,9 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 
+    {{-- blog section --}}
     <div class="blog">
         <div class="container">
             <div class="row">
@@ -415,18 +424,18 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="item">
                         <div class="photo">
-                            <img src="{{ asset('uploads/banner1.jpg') }}" alt="" />
+                            <img src="{{ asset('uploads/twitter.jpg') }}" alt="" />
                         </div>
                         <div class="text">
                             <h2>
-                                <a href="post.html">This is a sample blog post title</a>
+                                <a href="post.html">Twitter violated contract by failing to pay millions in bonuses, US
+                                    judge rules</a>
                             </h2>
                             <div class="short-des">
                                 <p>
-                                    Lorem ipsum dolor sit amet, nibh saperet
-                                    te pri, at nam diceret disputationi. Quo
-                                    an consul impedit, usu possim evertitur
-                                    dissentiet ei.
+                                    WASHINGTON, Dec 22 (Reuters) - Twitter violated contracts by failing to pay millions of
+                                    dollars in bonuses that the social media company, now called X Corp, had promised its
+                                    employees, a federal judge ruled on Friday.
                                 </p>
                             </div>
                             <div class="button">
@@ -438,18 +447,17 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="item">
                         <div class="photo">
-                            <img src="{{ asset('uploads/banner2.jpg') }}" alt="" />
+                            <img src="{{ asset('uploads/news2.jpg') }}" alt="" />
                         </div>
                         <div class="text">
                             <h2>
-                                <a href="post.html">This is a sample blog post title</a>
+                                <a href="post.html">Israel grants Intel $3.2 billion for new $25 billion chip plant</a>
                             </h2>
                             <div class="short-des">
                                 <p>
-                                    Nec in rebum primis causae. Affert
-                                    iisque ex pri, vis utinam vivendo
-                                    definitionem ad, nostrum omnes que per
-                                    et. Omnium antiopam.
+                                    JERUSALEM, Dec 26 - Israel's government agreed to give Intel (INTC.O) a $3.2 billion
+                                    grant for a new $25 billion chip plant it plans to build in southern Israel, both sides
+                                    said on Tuesday, in what is the largest investment ever by a company in Israel.
                                 </p>
                             </div>
                             <div class="button">
@@ -461,18 +469,19 @@
                 <div class="col-lg-4 col-md-6">
                     <div class="item">
                         <div class="photo">
-                            <img src="{{ asset('uploads/banner3.jpg') }}" alt="" />
+                            <img src="{{ asset('uploads/chatgpt.jpg') }}" alt="" />
                         </div>
                         <div class="text">
                             <h2>
-                                <a href="post.html">This is a sample blog post title</a>
+                                <a href="post.html">A year after ChatGPT’s release, the AI revolution is just beginning</a>
                             </h2>
                             <div class="short-des">
                                 <p>
-                                    Id pri placerat voluptatum, vero dicunt
-                                    dissentiunt eum et, adhuc iisque vis no.
-                                    Eu suavitate conten tiones definitionem
-                                    mel, ex vide.
+                                    New York
+                                    CNN -
+                                    ChatGPT may not be able to perform a cake smash on its first birthday today, but it
+                                    certainly managed to wow the world and create a mess of hope, hype and chaos
+                                    through nearly all parts of the economy in the past year.
                                 </p>
                             </div>
                             <div class="button">

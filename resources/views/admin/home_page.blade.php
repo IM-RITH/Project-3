@@ -18,6 +18,12 @@
                                         <button class="nav-link" id="v-pills-2-tab" data-bs-toggle="pill"
                                             data-bs-target="#v-pills-2" type="button" role="tab"
                                             aria-controls="v-pills-2" aria-selected="false">Job Category</button>
+                                        <button class="nav-link" id="v-pills-3-tab" data-bs-toggle="pill"
+                                            data-bs-target="#v-pills-3" type="button" role="tab"
+                                            aria-controls="v-pills-3" aria-selected="false">Why Choose Us</button>
+                                        <button class="nav-link" id="v-pills-4-tab" data-bs-toggle="pill"
+                                            data-bs-target="#v-pills-4" type="button" role="tab"
+                                            aria-controls="v-pills-4" aria-selected="false">Feature jobs</button>
                                     </div>
                                 </div>
                                 <div class="col-lg-9 col-md-12">
@@ -114,6 +120,84 @@
                                                             </option>
                                                             <option value="Hide"
                                                                 @if ($home_page_data->job_category_status == 'Hide') selected @endif>Hide
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        {{-- why choose us section --}}
+                                        <div class="tab-pane fade" id="v-pills-3" role="tabpanel"
+                                            aria-labelledby="v-pills-3-tab" tabindex="0">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Heading *</label>
+                                                        <input type="text" class="form-control"
+                                                            name="why_choose_heading"
+                                                            value="{{ $home_page_data->why_choose_heading }}">
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Sub Heading *</label>
+                                                        <input type="text" class="form-control"
+                                                            name="why_choose_subheading"
+                                                            value="{{ $home_page_data->why_choose_subheading }}">
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Existing Background *</label>
+                                                        <div>
+                                                            <img src="{{ asset('uploads/' . $home_page_data->why_choose_background) }}"
+                                                                alt="" class="w_300">
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Change Background *</label>
+                                                        <div>
+                                                            <input type="file" class="form-control mt_10"
+                                                                name="why_choose_background">
+                                                        </div>
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Status *</label>
+                                                        <select name="why_choose_status" class="form-control">
+                                                            <option value="Show"
+                                                                @if ($home_page_data->why_choose_status == 'Show') selected @endif>Show
+                                                            </option>
+                                                            <option value="Hide"
+                                                                @if ($home_page_data->why_choose_status == 'Hide') selected @endif>Hide
+                                                            </option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {{-- feature jobs section --}}
+                                        <div class="tab-pane fade" id="v-pills-4" role="tabpanel"
+                                            aria-labelledby="v-pills-4-tab" tabindex="0">
+                                            <div class="row">
+                                                <div class="col-md-12">
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Heading *</label>
+                                                        <input type="text" class="form-control"
+                                                            name="feature_jobs_heading"
+                                                            value="{{ $home_page_data->feature_jobs_heading }}">
+                                                    </div>
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Sub Heading *</label>
+                                                        <input type="text" class="form-control"
+                                                            name="feature_jobs_subheading"
+                                                            value="{{ $home_page_data->feature_jobs_subheading }}">
+                                                    </div>
+
+                                                    <div class="mb-4">
+                                                        <label class="form-label">Status *</label>
+                                                        <select name="feature_jobs_status" class="form-control">
+                                                            <option value="Show"
+                                                                @if ($home_page_data->feature_jobs_status == 'Show') selected @endif>Show
+                                                            </option>
+                                                            <option value="Hide"
+                                                                @if ($home_page_data->feature_jobs_status == 'Hide') selected @endif>Hide
                                                             </option>
                                                         </select>
                                                     </div>
