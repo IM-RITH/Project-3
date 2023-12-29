@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\AdminTermPageController;
 use App\Http\Controllers\Admin\AdminWhyChooseController;
 use App\Http\Controllers\Admin\AdminPackageController;
 use App\Http\Controllers\Admin\AdminPricingPageController;
+use App\Http\Controllers\Candidate\CandidateController;
+use App\Http\Controllers\Company\CompanyController;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\FaqController;
 use App\Http\Controllers\Front\ForgetPasswordController;
@@ -37,7 +39,47 @@ Route::post('contact-submit', [ContactController::class, 'submit'])->name('conta
 Route::get('pricing', [PricingController::class, 'index'])->name('pricing');
 Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::get('signup', [SignupController::class, 'index'])->name('signup');
-Route::get('forget-password', [ForgetPasswordController::class, 'index'])->name('forget_password');
+
+
+
+// company signup and login
+Route::post('company_signup_submit', [SignupController::class, 'company_signup_submit'])->name('company_signup_submit');
+Route::get('company_signup_verify/{token}/{email}', [SignupController::class, 'company_signup_verify'])->name('company_signup_verify');
+Route::post('company_login_submit', [LoginController::class, 'company_login_submit'])->name('company_login_submit');
+Route::get('/company/logout', [LoginController::class, 'company_logout'])->name('company_logout');
+Route::get('forget_password_company', [ForgetPasswordController::class, 'company_forget_password'])->name('company_forget_password');
+Route::post('company_forget_password/submit', [ForgetPasswordController::class, 'company_forget_password_submit'])->name('company_forget_password_submit');
+Route::get('reset-password/company/{token}/{email}', [ForgetPasswordController::class, 'company_reset_password'])->name('company_reset_password');
+Route::post('company-reset-password-submit', [ForgetPasswordController::class, 'company_reset_password_submit'])->name('company_reset_password_submit');
+
+
+// candidate
+Route::post('candidate_signup_submit', [SignupController::class, 'candidate_signup_submit'])->name('candidate_signup_submit');
+Route::get('candidate_signup_verify/{token}/{email}', [SignupController::class, 'candidate_signup_verify'])->name('candidate_signup_verify');
+Route::post('candidate_login_submit', [LoginController::class, 'candidate_login_submit'])->name('candidate_login_submit');
+Route::get('/candidate/logout', [LoginController::class, 'candidate_logout'])->name('candidate_logout');
+Route::get('forget_password_candidate', [ForgetPasswordController::class, 'candidate_forget_password'])->name('candidate_forget_password');
+Route::post('candidate_forget_password/submit', [ForgetPasswordController::class, 'candidate_forget_password_submit'])->name('candidate_forget_password_submit');
+Route::get('reset-password/candidate/{token}/{email}', [ForgetPasswordController::class, 'candidate_reset_password'])->name('candidate_reset_password');
+Route::post('candidate-reset-password-submit', [ForgetPasswordController::class, 'candidate_reset_password_submit'])->name('candidate_reset_password_submit');
+
+// candidate middleware
+Route::middleware(['candidate:candidate'])->group(function () {
+    Route::get('/candidate/dashboard', [CandidateController::class, 'dashboard'])->name('candidate_dashboard');
+});
+
+// company middleware
+Route::middleware(['company:company'])->group(function () {
+    Route::get('/company/dashboard', [CompanyController::class, 'dashboard'])->name('company_dashboard');
+    Route::get('/company/make-payment', [CompanyController::class, 'make_payment'])->name('company_make_payment');
+    Route::get('/company/orders', [CompanyController::class, 'orders'])->name('company_orders');
+    Route::post('/company/paypal/payment', [CompanyController::class, 'paypal'])->name('paypal');
+    Route::get('/company/paypal/success', [CompanyController::class, 'paypal_success'])->name('paypal_success');
+    Route::get('/company/paypal/cancel', [CompanyController::class, 'paypal_cancel'])->name('paypal_cancel');
+    Route::post('/company/stripe/payment', [CompanyController::class, 'company_stripe'])->name('company_stripe');
+    Route::get('/company/stripe/success', [CompanyController::class, 'stripe_success'])->name('stripe_success');
+    Route::get('/company/stripe/cancel', [CompanyController::class, 'stripe_cancel'])->name('stripe_cancel');
+});
 
 /*Admin route*/
 Route::get('/admin/login', [AdminLoginController::class, 'index'])->name('admin_login');
@@ -49,106 +91,59 @@ Route::get('/admin/reset-password/{token}/{email}', [AdminLoginController::class
 Route::post('/admin/reset-password-submit', [AdminLoginController::class, 'reset_password_submit'])->name('admin_reset_password_submit');
 
 Route::middleware(['admin:admin'])->group(function () {
-
-    Route::get('/admin/home', [AdminHomeController::class, 'index'])
-        ->name('admin_home');
-    Route::get('/admin/edit-profile', [AdminProfileController::class, 'index'])
-        ->name('admin_profile');
-    Route::post('/admin/edit-profile-submit', [AdminProfileController::class, 'profile_submit'])
-        ->name('admin_profile_submit');
-    Route::get('/admin/home-page', [AdminHomePageController::class, 'index'])
-        ->name('admin_home_page');
-    Route::post('/admin/home-page/update', [AdminHomePageController::class, 'update'])
-        ->name('admin_home_page_update');
-    Route::get('/admin/faq-page', [AdminFaqPageController::class, 'index'])
-        ->name('admin_faq_page');
-    Route::post('/admin/faq-page/update', [AdminFaqPageController::class, 'update'])
-        ->name('admin_faq_page_update');
-    Route::get('/admin/term-page', [AdminTermPageController::class, 'index'])
-        ->name('admin_term_page');
-    Route::post('/admin/term-page/update', [AdminTermPageController::class, 'update'])
-        ->name('admin_term_page_update');
-    Route::get('/admin/privacy-page', [AdminPrivacyPageController::class, 'index'])
-        ->name('admin_privacy_page');
-    Route::post('/admin/privacy-page/update', [AdminPrivacyPageController::class, 'update'])
-        ->name('admin_privacy_page_update');
+    Route::get('/admin/home', [AdminHomeController::class, 'index'])->name('admin_home');
+    Route::get('/admin/edit-profile', [AdminProfileController::class, 'index'])->name('admin_profile');
+    Route::post('/admin/edit-profile-submit', [AdminProfileController::class, 'profile_submit'])->name('admin_profile_submit');
+    Route::get('/admin/home-page', [AdminHomePageController::class, 'index'])->name('admin_home_page');
+    Route::post('/admin/home-page/update', [AdminHomePageController::class, 'update'])->name('admin_home_page_update');
+    Route::get('/admin/faq-page', [AdminFaqPageController::class, 'index'])->name('admin_faq_page');
+    Route::post('/admin/faq-page/update', [AdminFaqPageController::class, 'update'])->name('admin_faq_page_update');
+    Route::get('/admin/term-page', [AdminTermPageController::class, 'index'])->name('admin_term_page');
+    Route::post('/admin/term-page/update', [AdminTermPageController::class, 'update'])->name('admin_term_page_update');
+    Route::get('/admin/privacy-page', [AdminPrivacyPageController::class, 'index'])->name('admin_privacy_page');
+    Route::post('/admin/privacy-page/update', [AdminPrivacyPageController::class, 'update'])->name('admin_privacy_page_update');
     // contact route
-    Route::get('/admin/contact-page', [AdminContactPageController::class, 'index'])
-        ->name('admin_contact_page');
-    Route::post('/admin/contact-page/update', [AdminContactPageController::class, 'update'])
-        ->name('admin_contact_page_update');
+    Route::get('/admin/contact-page', [AdminContactPageController::class, 'index'])->name('admin_contact_page');
+    Route::post('/admin/contact-page/update', [AdminContactPageController::class, 'update'])->name('admin_contact_page_update');
     // job category page
-    Route::get('/admin/job-category-page', [AdminJobCategoryPageController::class, 'index'])
-        ->name('admin_job_category_page');
-    Route::post('/admin/job-category-page/update', [AdminJobCategoryPageController::class, 'update'])
-        ->name('admin_job_category_page_update');
+    Route::get('/admin/job-category-page', [AdminJobCategoryPageController::class, 'index'])->name('admin_job_category_page');
+    Route::post('/admin/job-category-page/update', [AdminJobCategoryPageController::class, 'update'])->name('admin_job_category_page_update');
     // pricing
-    Route::get('/admin/pricing-page', [AdminPricingPageController::class, 'index'])
-        ->name('admin_pricing_page');
-    Route::post('/admin/pricing-page/update', [AdminPricingPageController::class, 'update'])
-        ->name('admin_pricing_page_update');
+    Route::get('/admin/pricing-page', [AdminPricingPageController::class, 'index'])->name('admin_pricing_page');
+    Route::post('/admin/pricing-page/update', [AdminPricingPageController::class, 'update'])->name('admin_pricing_page_update');
     // others
-    Route::get('/admin/other-page', [AdminOtherPageController::class, 'index'])
-        ->name('admin_other_page');
-    Route::post('/admin/other-page/update', [AdminOtherPageController::class, 'update'])
-        ->name('admin_other_page_update');
-
+    Route::get('/admin/other-page', [AdminOtherPageController::class, 'index'])->name('admin_other_page');
+    Route::post('/admin/other-page/update', [AdminOtherPageController::class, 'update'])->name('admin_other_page_update');
 
     // Job category
-    Route::get('/admin/job-category/view', [AdminJobCategoryController::class, 'index'])
-        ->name('admin_job_category');
-    Route::get('/admin/job-category/add', [AdminJobCategoryController::class, 'add_section'])
-        ->name('admin_job_category_add');
-    Route::post('/admin/job-category/store', [AdminJobCategoryController::class, 'store'])
-        ->name('admin_job_category_store');
-    Route::get('/admin/job-category/edit/{id}', [AdminJobCategoryController::class, 'edit'])
-        ->name('admin_job_category_edit');
-    Route::post('/admin/job-category/update{id}/', [AdminJobCategoryController::class, 'update'])
-        ->name('admin_job_category_update');
-    Route::get('/admin/job-category/delete/{id}', [AdminJobCategoryController::class, 'delete'])
-        ->name('admin_job_category_delete');
-
-
+    Route::get('/admin/job-category/view', [AdminJobCategoryController::class, 'index'])->name('admin_job_category');
+    Route::get('/admin/job-category/add', [AdminJobCategoryController::class, 'add_section'])->name('admin_job_category_add');
+    Route::post('/admin/job-category/store', [AdminJobCategoryController::class, 'store'])->name('admin_job_category_store');
+    Route::get('/admin/job-category/edit/{id}', [AdminJobCategoryController::class, 'edit'])->name('admin_job_category_edit');
+    Route::post('/admin/job-category/update{id}/', [AdminJobCategoryController::class, 'update'])->name('admin_job_category_update');
+    Route::get('/admin/job-category/delete/{id}', [AdminJobCategoryController::class, 'delete'])->name('admin_job_category_delete');
 
     // Why choose
-    Route::get('/admin/why-choose/view', [AdminWhyChooseController::class, 'index'])
-        ->name('admin_why_choose_item');
-    Route::get('/admin/why-choose/add', [AdminWhyChooseController::class, 'add_section'])
-        ->name('admin_why_choose_item_add');
-    Route::post('/admin/why-choose/store', [AdminWhyChooseController::class, 'store'])
-        ->name('admin_why_choose_item_store');
-    Route::get('/admin/why-choose/edit/{id}', [AdminWhyChooseController::class, 'edit'])
-        ->name('admin_why_choose_item_edit');
-    Route::post('/admin/why-choose/update{id}/', [AdminWhyChooseController::class, 'update'])
-        ->name('admin_why_choose_item_update');
-    Route::get('/admin/why-choose/delete/{id}', [AdminWhyChooseController::class, 'delete'])
-        ->name('admin_why_choose_item_delete');
+    Route::get('/admin/why-choose/view', [AdminWhyChooseController::class, 'index'])->name('admin_why_choose_item');
+    Route::get('/admin/why-choose/add', [AdminWhyChooseController::class, 'add_section'])->name('admin_why_choose_item_add');
+    Route::post('/admin/why-choose/store', [AdminWhyChooseController::class, 'store'])->name('admin_why_choose_item_store');
+    Route::get('/admin/why-choose/edit/{id}', [AdminWhyChooseController::class, 'edit'])->name('admin_why_choose_item_edit');
+    Route::post('/admin/why-choose/update{id}/', [AdminWhyChooseController::class, 'update'])->name('admin_why_choose_item_update');
+    Route::get('/admin/why-choose/delete/{id}', [AdminWhyChooseController::class, 'delete'])->name('admin_why_choose_item_delete');
 
     // FAQ
-    Route::get('/admin/faq/view', [AdminFaqController::class, 'index'])
-        ->name('admin_faq');
-    Route::get('/admin/faq/add', [AdminFaqController::class, 'add_section'])
-        ->name('admin_faq_item_add');
-    Route::post('/admin/faq/store', [AdminFaqController::class, 'store'])
-        ->name('admin_faq_item_store');
-    Route::get('/admin/faq/edit/{id}', [AdminFaqController::class, 'edit'])
-        ->name('admin_faq_item_edit');
-    Route::post('/admin/faq/update{id}/', [AdminFaqController::class, 'update'])
-        ->name('admin_faq_item_update');
-    Route::get('/admin/faq/delete/{id}', [AdminFaqController::class, 'delete'])
-        ->name('admin_faq_item_delete');
+    Route::get('/admin/faq/view', [AdminFaqController::class, 'index'])->name('admin_faq');
+    Route::get('/admin/faq/add', [AdminFaqController::class, 'add_section'])->name('admin_faq_item_add');
+    Route::post('/admin/faq/store', [AdminFaqController::class, 'store'])->name('admin_faq_item_store');
+    Route::get('/admin/faq/edit/{id}', [AdminFaqController::class, 'edit'])->name('admin_faq_item_edit');
+    Route::post('/admin/faq/update{id}/', [AdminFaqController::class, 'update'])->name('admin_faq_item_update');
+    Route::get('/admin/faq/delete/{id}', [AdminFaqController::class, 'delete'])->name('admin_faq_item_delete');
 
     // Package
-    Route::get('/admin/package/view', [AdminPackageController::class, 'index'])
-        ->name('admin_package');
-    Route::get('/admin/package/add', [AdminPackageController::class, 'add_section'])
-        ->name('admin_package_item_add');
-    Route::post('/admin/package/store', [AdminPackageController::class, 'store'])
-        ->name('admin_package_item_store');
-    Route::get('/admin/package/edit/{id}', [AdminPackageController::class, 'edit'])
-        ->name('admin_package_item_edit');
-    Route::post('/admin/package/update{id}/', [AdminPackageController::class, 'update'])
-        ->name('admin_package_item_update');
-    Route::get('/admin/package/delete/{id}', [AdminPackageController::class, 'delete'])
-        ->name('admin_package_item_delete');
+    Route::get('/admin/package/view', [AdminPackageController::class, 'index'])->name('admin_package');
+    Route::get('/admin/package/add', [AdminPackageController::class, 'add_section'])->name('admin_package_item_add');
+    Route::post('/admin/package/store', [AdminPackageController::class, 'store'])->name('admin_package_item_store');
+    Route::get('/admin/package/edit/{id}', [AdminPackageController::class, 'edit'])->name('admin_package_item_edit');
+    Route::post('/admin/package/update{id}/', [AdminPackageController::class, 'update'])->name('admin_package_item_update');
+    Route::get('/admin/package/delete/{id}', [AdminPackageController::class, 'delete'])->name('admin_package_item_delete');
 });
