@@ -4,7 +4,7 @@
 @section('seo_meta_description') {{ $page_faq_item-> meta_description }} @endsection --}}
 
 @section('main_content')
-    <div class="page-top" style="background-image: url('{{ asset('uploads/banner.jpg') }}')">
+    <div class="page-top" style="background-image: url('{{ asset('uploads/company.jpg') }}')">
         <div class="bg"></div>
         <div class="container">
             <div class="row">

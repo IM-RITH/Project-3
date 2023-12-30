@@ -23,8 +23,8 @@
     <li class="list-group-item">
         <a href="company-applications.html">Candidate Applications</a>
     </li>
-    <li class="list-group-item">
-        <a href="company-edit-profile.html">Edit Profile</a>
+    <li class="list-group-item {{ Request::is('company/edit-profile') ? 'active':'' }}">
+        <a href="{{ route('company_edit_profile') }}">Edit Profile</a>
     </li>
     <li class="list-group-item">
         <a href="{{ route('company_logout') }}">Logout</a>

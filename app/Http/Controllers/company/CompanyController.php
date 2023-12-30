@@ -6,6 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Package;
+use  App\Models\CompanyLocation;
+use App\Models\CompanyIndustry;
+use App\Models\CompanySize;
+use App\Models\Company;
+use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
 
@@ -19,7 +24,7 @@ class CompanyController extends Controller
     }
     public function orders()
     {
-        $orders = Order::with('rPackage')->orderBy('id','desc')->where('company_id', Auth::guard('company')->user()->id)->get();
+        $orders = Order::with('rPackage')->orderBy('id', 'desc')->where('company_id', Auth::guard('company')->user()->id)->get();
         $packages = Package::get();
         return view('company.orders', compact('orders'));
     }
@@ -84,5 +89,64 @@ class CompanyController extends Controller
     public function stripe_cancel()
     {
         return redirect()->route('company_make_payment')->with('error', 'Payment is cancelled.');
+    }
+
+    public function edit_profile()
+    {
+        $company_locations = CompanyLocation::orderBy('name', 'asc')->get();
+        $company_industries = CompanyIndustry::orderBy('name', 'asc')->get();
+        $company_sizes = CompanySize::get();
+        return view('company.edit_profile', compact('company_locations', 'company_industries', 'company_sizes'));
+    }
+    public function edit_profile_update(Request $request)
+    {
+        $obj = Company::where('id', Auth::guard('company')->user()->id)->first();
+        $id = $obj->id;
+        $request->validate([
+            'company_name' => 'required',
+            'person_name' => 'required',
+            'username' => ['required', 'alpha_dash', Rule::unique('companies')->ignore($id)],
+            'email' => ['required', 'email', Rule::unique('companies')->ignore($id)],
+        ]);
+        if ($request->hasFile('logo')) {
+            $request->validate([
+                'logo' => 'required|mimes:jpg,jpeg,png,gif',
+            ]);
+            if (Auth::guard('company')->user()->logo != '') {
+                unlink(public_path('uploads/' . $obj->logo));
+            }
+
+            $ext = $request->file('logo')->extension();
+            $final_name = 'company_logo' . '.' . $ext;
+            $request->file('logo')->move(public_path('uploads/'), $final_name);
+            $obj->logo = $final_name;
+        }
+        $obj->company_name = $request->company_name;
+        $obj->person_name = $request->person_name;
+        $obj->username = $request->username;
+        $obj->email = $request->email;
+        $obj->phone = $request->phone;
+        $obj->address = $request->address;
+        $obj->company_location_id = $request->company_location_id;
+        $obj->company_industry_id = $request->company_industry_id;
+        $obj->company_size_id = $request->company_size_id;
+        $obj->founded_on = $request->founded_on;
+        $obj->website = $request->website;
+        $obj->description = $request->description;
+        $obj->oh_mon = $request->oh_mon;
+        $obj->oh_tues = $request->oh_tues;
+        $obj->oh_wed = $request->oh_wed;
+        $obj->oh_thu = $request->oh_thu;
+        $obj->oh_fri = $request->oh_fri;
+        $obj->oh_sat = $request->oh_sat;
+        $obj->oh_sun = $request->oh_sun;
+        $obj->map_code = $request->map_code;
+        $obj->facebook = $request->facebook;
+        $obj->Twitter = $request->Twitter;
+        $obj->linkedIn = $request->linkedIn;
+        $obj->instagram = $request->instagram;
+        $obj->update();
+
+        return redirect()->back()->with('success', 'Profile is update successfully');
     }
 }

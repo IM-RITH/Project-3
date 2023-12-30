@@ -30,27 +30,11 @@
                                                     <option value="{{ $home_page_data->job_location }}">
                                                         Job Location
                                                     </option>
-                                                    <option value="">
-                                                        Hanoi
-                                                    </option>
-                                                    <option value="">
-                                                        Ho Chi Minh
-                                                    </option>
-                                                    <option value="">
-                                                        Da Nang
-                                                    </option>
-                                                    <option value="">
-                                                        Hue
-                                                    </option>
-                                                    <option value="">
-                                                        Da Lat
-                                                    </option>
-                                                    <option value="">
-                                                        Phnom Penh
-                                                    </option>
-                                                    <option value="">
-                                                        Siem Reap
-                                                    </option>
+                                                    @foreach ($all_job_locations as $item)
+                                                        <option value="{{ $item->id }}">
+                                                            {{ $item->name }}
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>
@@ -60,7 +44,7 @@
                                                     <option value="{{ $home_page_data->job_category }}">
                                                         Job Category
                                                     </option>
-                                                    @foreach ($job_categories as $item)
+                                                    @foreach ($all_job_categories as $item)
                                                         <option value="{{ $item->id }}">
                                                             {{ $item->name }}
                                                         </option>
