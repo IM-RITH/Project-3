@@ -14,8 +14,8 @@
     <li class="list-group-item">
         <a href="company-jobs.html">All Jobs</a>
     </li>
-    <li class="list-group-item">
-        <a href="company-photos.html">Photos</a>
+<li class="list-group-item {{ Request::is('company/photos') ? 'active':'' }}">
+        <a href="{{ route('company_photos') }}">Photos</a>
     </li>
     <li class="list-group-item">
         <a href="company-videos.html">Videos</a>

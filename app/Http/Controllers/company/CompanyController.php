@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Package;
-use  App\Models\CompanyLocation;
+use App\Models\CompanyLocation;
 use App\Models\CompanyIndustry;
 use App\Models\CompanySize;
 use App\Models\Company;
+use App\Models\CompanyPhoto;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Srmklive\PayPal\Services\PayPal as PayPalClient;
@@ -24,13 +25,19 @@ class CompanyController extends Controller
     }
     public function orders()
     {
-        $orders = Order::with('rPackage')->orderBy('id', 'desc')->where('company_id', Auth::guard('company')->user()->id)->get();
+        $orders = Order::with('rPackage')
+            ->orderBy('id', 'desc')
+            ->where('company_id', Auth::guard('company')->user()->id)
+            ->get();
         $packages = Package::get();
         return view('company.orders', compact('orders'));
     }
     public function make_payment()
     {
-        $currently_plan = Order::with('rPackage')->where('company_id', Auth::guard('company')->user()->id)->where('currently_active', 1)->first();
+        $currently_plan = Order::with('rPackage')
+            ->where('company_id', Auth::guard('company')->user()->id)
+            ->where('currently_active', 1)
+            ->first();
         $packages = Package::get();
         return view('company.make_payment', compact('currently_plan', 'packages'));
     }
@@ -46,8 +53,7 @@ class CompanyController extends Controller
                     'price_data' => [
                         'currency' => 'usd',
                         'product_data' => [
-                            'name' =>
-                            $single_package_data->package_name
+                            'name' => $single_package_data->package_name,
                         ],
                         'unit_amount' => $single_package_data->package_price * 100,
                     ],
@@ -75,7 +81,7 @@ class CompanyController extends Controller
         $obj->order_no = time();
         $obj->paid_amount = session()->get('package_price');
         $obj->payment_method = 'Stripe';
-        $obj->start_date = date("Y-m-d");
+        $obj->start_date = date('Y-m-d');
         $days = session()->get('package_days');
         $obj->expire_date = date('Y-m-d', strtotime("+$days days"));
         $obj->currently_active = 1;
@@ -84,11 +90,15 @@ class CompanyController extends Controller
         session()->forget('package_id');
         session()->forget('package_price');
         session()->forget('package_days');
-        return redirect()->route('company_make_payment')->with('success', 'Payment is successfully.');
+        return redirect()
+            ->route('company_make_payment')
+            ->with('success', 'Payment is successfully.');
     }
     public function stripe_cancel()
     {
-        return redirect()->route('company_make_payment')->with('error', 'Payment is cancelled.');
+        return redirect()
+            ->route('company_make_payment')
+            ->with('error', 'Payment is cancelled.');
     }
 
     public function edit_profile()
@@ -147,6 +157,70 @@ class CompanyController extends Controller
         $obj->instagram = $request->instagram;
         $obj->update();
 
-        return redirect()->back()->with('success', 'Profile is update successfully');
+        return redirect()
+            ->back()
+            ->with('success', 'Profile is update successfully');
+    }
+
+    public function photos()
+    {
+        // fetch order data to know allow pics to post
+        // check if company buy a package
+        $order_data = Order::where('company_id', Auth::guard('company')->user()->id)
+            ->where('currently_active', 1)
+            ->first();
+
+        // check company buy the package yet
+        if (!$order_data) {
+            return redirect()
+                ->back()
+                ->with('error', 'You must buy a package first and then the system will allow you to access this section');
+        }
+        $package_data = Package::where('id', $order_data->package_id)->first();
+        if ($package_data->total_allowed_photos == 0) {
+            return redirect()
+                ->back()
+                ->with('error', 'Your current package does not allow to access this section!');
+        }
+        $photos = CompanyPhoto::where('company_id', Auth::guard('company')->user()->id)->get();
+        return view('company.photo', compact('photos'));
+    }
+    public function company_photo_submit(Request $request)
+    {
+        $order_data = Order::where('company_id', Auth::guard('company')->user()->id)
+            ->where('currently_active', 1)
+            ->first();
+        $package_data = Package::where('id', $order_data->package_id)->first();
+        $existing_photo_number = CompanyPhoto::where('company_id', Auth::guard('company')->user()->id)->count();
+
+        if ($package_data->total_allowed_photos == $existing_photo_number) {
+            return redirect()
+                ->back()
+                ->with('error', 'Your current package does not allow to post anymore!');
+        }
+
+        $request->validate([
+            'photo' => 'required|mimes:jpg,jpeg,png,gif',
+        ]);
+        $obj = new CompanyPhoto();
+        $ext = $request->file('photo')->extension();
+        $final_name = 'company_photo_' . time() . '.' . $ext;
+        $request->file('photo')->move(public_path('uploads/'), $final_name);
+        $obj->photo = $final_name;
+        $obj->company_id = Auth::guard('company')->user()->id;
+        $obj->save();
+        return redirect()
+            ->back()
+            ->with('success', 'Photos is saved successfully');
+    }
+
+    public function delete_photos($id)
+    {
+        $single_photo = CompanyPhoto::where('id', $id)->first();
+        unlink(public_path('uploads/' . $single_photo->photo));
+        CompanyPhoto::where('id', $id)->delete();
+        return redirect()
+            ->back()
+            ->with('success', 'Photo is deleted Successfully');
     }
 }

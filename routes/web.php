@@ -89,6 +89,9 @@ Route::middleware(['company:company'])->group(function () {
     Route::get('/company/stripe/cancel', [CompanyController::class, 'stripe_cancel'])->name('stripe_cancel');
     Route::get('/company/edit-profile', [CompanyController::class, 'edit_profile'])->name('company_edit_profile');
     Route::post('/company/edit-profil/update', [CompanyController::class, 'edit_profile_update'])->name('company_edit_profile_update');
+    Route::get('/company/photos', [CompanyController::class, 'photos'])->name('company_photos');
+    Route::post('/company/photos/submit', [CompanyController::class, 'company_photo_submit'])->name('company_photo_submit');
+    Route::get('/company/photos/delete/{id}', [CompanyController::class, 'delete_photos'])->name('company_photo_delete');
 });
 
 /*Admin route*/
