@@ -78,13 +78,19 @@ Route::middleware(['candidate:candidate'])->group(function () {
     Route::post('/candidate/edit-profil/update', [CandidateController::class, 'edit_profile_update'])->name('candidate_edit_profile_update');
     Route::get('/candidate/change-password', [CandidateController::class, 'candidate_change_password'])->name('candidate_change_password');
     Route::post('/candidate/change-password/update', [CandidateController::class, 'candidate_change_password_update'])->name('candidate_change_password_update');
-
     Route::get('/candidate/education/view', [CandidateController::class, 'education'])->name('candidate_education');
     Route::get('/candidate/education/add', [CandidateController::class, 'add_section'])->name('candidate_education_add');
     Route::post('/candidate/education/store', [CandidateController::class, 'store'])->name('candidate_education_store');
     Route::get('/candidate/education/edit/{id}', [CandidateController::class, 'edit'])->name('candidate_education_edit');
     Route::post('/candidate/education/update{id}/', [CandidateController::class, 'update'])->name('candidate_education_update');
     Route::get('/candidate/education/delete/{id}', [CandidateController::class, 'delete'])->name('candidate_education_delete');
+
+    Route::get('/candidate/skill/view', [CandidateController::class, 'skill'])->name('candidate_skill');
+    Route::get('/candidate/skill/add', [CandidateController::class, 'skill_add_section'])->name('candidate_skill_add');
+    Route::post('/candidate/skill/store', [CandidateController::class, 'skill_store'])->name('candidate_skill_store');
+    Route::get('/candidate/skill/edit/{id}', [CandidateController::class, 'skill_edit'])->name('candidate_skill_edit');
+    Route::post('/candidate/skill/update{id}/', [CandidateController::class, 'skill_update'])->name('candidate_skill_update');
+    Route::get('/candidate/skill/delete/{id}', [CandidateController::class, 'skill_delete'])->name('candidate_skill_delete');
 });
 
 // company middleware
