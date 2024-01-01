@@ -8,23 +8,26 @@
     <li class="list-group-item {{ Request::is('company/orders') ? 'active':'' }}">
         <a href="{{ route('company_orders') }}">Orders</a>
     </li>
-    <li class="list-group-item">
-        <a href="company-job-add.html">Create Job</a>
+    <li class="list-group-item {{ Request::is('company/create-job') ? 'active':'' }}">
+        <a href="{{ route('company_jobs_create') }}">Create Job</a>
     </li>
-    <li class="list-group-item">
-        <a href="company-jobs.html">All Jobs</a>
+<li class="list-group-item {{ Request::is('company/jobs') ? 'active':'' }}">
+        <a href="{{ route('company_jobs') }}">All Jobs</a>
     </li>
 <li class="list-group-item {{ Request::is('company/photos') ? 'active':'' }}">
         <a href="{{ route('company_photos') }}">Photos</a>
     </li>
-    <li class="list-group-item">
-        <a href="company-videos.html">Videos</a>
+<li class="list-group-item {{ Request::is('company/videos') ? 'active':'' }}">
+        <a href="{{ route('company_videos') }}">Videos</a>
     </li>
     <li class="list-group-item">
         <a href="company-applications.html">Candidate Applications</a>
     </li>
     <li class="list-group-item {{ Request::is('company/edit-profile') ? 'active':'' }}">
         <a href="{{ route('company_edit_profile') }}">Edit Profile</a>
+    </li>
+     <li class="list-group-item {{ Request::is('company/change-password') ? 'active':'' }}">
+        <a href="{{ route('company_change_password') }}">Change Password</a>
     </li>
     <li class="list-group-item">
         <a href="{{ route('company_logout') }}">Logout</a>

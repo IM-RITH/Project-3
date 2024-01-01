@@ -1855,3 +1855,6 @@ h4.resume {
     font-size: 22px;
     font-weight: 700;
 }
+.datepicker {
+    z-index: 999 !important;
+}

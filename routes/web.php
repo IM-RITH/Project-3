@@ -92,6 +92,17 @@ Route::middleware(['company:company'])->group(function () {
     Route::get('/company/photos', [CompanyController::class, 'photos'])->name('company_photos');
     Route::post('/company/photos/submit', [CompanyController::class, 'company_photo_submit'])->name('company_photo_submit');
     Route::get('/company/photos/delete/{id}', [CompanyController::class, 'delete_photos'])->name('company_photo_delete');
+    Route::get('/company/videos', [CompanyController::class, 'videos'])->name('company_videos');
+    Route::post('/company/videos/submit', [CompanyController::class, 'company_video_submit'])->name('company_video_submit');
+    Route::get('/company/videos/delete/{id}', [CompanyController::class, 'delete_videos'])->name('company_video_delete');
+    Route::get('/company/change-password', [CompanyController::class, 'company_change_password'])->name('company_change_password');
+    Route::post('/company/change-password/update', [CompanyController::class, 'company_change_password_update'])->name('company_change_password_update');
+    Route::get('/company/create-job', [CompanyController::class, 'jobs_create'])->name('company_jobs_create');
+    Route::post('/company/create-job/submit', [CompanyController::class, 'jobs_create_submit'])->name('company_jobs_create_submit');
+    Route::get('/company/jobs', [CompanyController::class, 'jobs'])->name('company_jobs');
+    Route::get('/company/job-edit/{id}', [CompanyController::class, 'edit_jobs'])->name('company_jobs_edit');
+    Route::post('/company/job-update/{id}', [CompanyController::class, 'jobs_update'])->name('company_jobs_update');
+    Route::get('/company/job-delete/{id}', [CompanyController::class, 'jobs_delete'])->name('company_jobs_delete');
 });
 
 /*Admin route*/
