@@ -74,6 +74,17 @@ Route::post('candidate-reset-password-submit', [ForgetPasswordController::class,
 // candidate middleware
 Route::middleware(['candidate:candidate'])->group(function () {
     Route::get('/candidate/dashboard', [CandidateController::class, 'dashboard'])->name('candidate_dashboard');
+    Route::get('/candidate/edit-profile', [CandidateController::class, 'edit_profile'])->name('candidate_edit_profile');
+    Route::post('/candidate/edit-profil/update', [CandidateController::class, 'edit_profile_update'])->name('candidate_edit_profile_update');
+    Route::get('/candidate/change-password', [CandidateController::class, 'candidate_change_password'])->name('candidate_change_password');
+    Route::post('/candidate/change-password/update', [CandidateController::class, 'candidate_change_password_update'])->name('candidate_change_password_update');
+
+    Route::get('/candidate/education/view', [CandidateController::class, 'education'])->name('candidate_education');
+    Route::get('/candidate/education/add', [CandidateController::class, 'add_section'])->name('candidate_education_add');
+    Route::post('/candidate/education/store', [CandidateController::class, 'store'])->name('candidate_education_store');
+    Route::get('/candidate/education/edit/{id}', [CandidateController::class, 'edit'])->name('candidate_education_edit');
+    Route::post('/candidate/education/update{id}/', [CandidateController::class, 'update'])->name('candidate_education_update');
+    Route::get('/candidate/education/delete/{id}', [CandidateController::class, 'delete'])->name('candidate_education_delete');
 });
 
 // company middleware
