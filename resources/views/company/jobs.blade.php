@@ -6,7 +6,7 @@
         <div class="container">
             <div class="row">
                 <div class="col-md-12">
-                    <h2>Company Edit Profile</h2>
+                    <h2>All Jobs</h2>
                 </div>
             </div>
         </div>

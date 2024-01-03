@@ -18,13 +18,13 @@
                         <li class="nav-item {{ Request::is('/') ? 'active' : '' }}">
                             <a href="{{ route('home') }}" class="nav-link">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="jobs.html" class="nav-link">
+                        <li class="nav-item {{ Request::is('job-listing') ||Request::is('job/*') ? 'active' : '' }}">
+                            <a href="{{ route('job_listing') }}" class="nav-link">
                                 Find Jobs</a>
                         </li>
-                        <li class="nav-item">
-                            <a href="companies.html" class="nav-link">Companies</a>
-                        </li>
+                        {{-- <li class="nav-item {{ Request::is('company-listing') ||Request::is('company/*') ? 'active' : '' }}">
+                            <a href="{{ route('company_listing') }}" class="nav-link">Companies</a>
+                        </li> --}}
                         <li class="nav-item {{ Request::is('pricing') ? 'active' : '' }}">
                             <a href="{{ route('pricing') }}" class="nav-link">Pricing</a>
                         </li>

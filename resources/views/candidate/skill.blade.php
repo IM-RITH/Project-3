@@ -31,7 +31,7 @@
                             <tbody>
                                 <tr>
                                     <th>No.</th>
-                                    <th>Name Of Skill</th>
+                                    <th>Name Of skill</th>
                                     <th>Percentage</th>
                                     
                                     <th class="w-100">Action</th>

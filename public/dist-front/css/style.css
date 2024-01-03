@@ -1403,6 +1403,7 @@ select {
     padding: 8px 15px;
     border-radius: 4px;
     margin-bottom: 15px;
+    margin-top: 30px;
 }
 @media (max-width: 767px) {
     .job-filter {
@@ -1843,6 +1844,7 @@ select {
 
 .select2-container {
     z-index: 99999 !important;
+    width: 100% !important;
 }
 .select2-container--bootstrap .select2-selection--single {
     height: 36px !important;

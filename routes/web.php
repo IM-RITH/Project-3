@@ -25,11 +25,13 @@ use App\Http\Controllers\Admin\AdminPackageController;
 use App\Http\Controllers\Admin\AdminPricingPageController;
 use App\Http\Controllers\Candidate\CandidateController;
 use App\Http\Controllers\Company\CompanyController;
+use App\Http\Controllers\Front\CompanyListingController;
 use App\Http\Controllers\Front\ContactController;
 use App\Http\Controllers\Front\FaqController;
 use App\Http\Controllers\Front\ForgetPasswordController;
 use App\Http\Controllers\Front\HomeController;
 use App\Http\Controllers\Front\JobCategoryController;
+use App\Http\Controllers\Front\JobListingController;
 use App\Http\Controllers\Front\LoginController;
 use App\Http\Controllers\Front\PricingController;
 use App\Http\Controllers\Front\PrivacyController;
@@ -45,10 +47,15 @@ Route::get('privacy-policy', [PrivacyController::class, 'index'])->name('privacy
 Route::get('contact', [ContactController::class, 'index'])->name('contact');
 Route::post('contact-submit', [ContactController::class, 'submit'])->name('contact_submit');
 Route::get('pricing', [PricingController::class, 'index'])->name('pricing');
+Route::get('job-listing', [JobListingController::class, 'index'])->name('job_listing');
 Route::get('login', [LoginController::class, 'index'])->name('login');
 Route::get('signup', [SignupController::class, 'index'])->name('signup');
+Route::get('job/{id}', [JobListingController::class, 'detail'])->name('job');
+Route::post('job/enquery/email', [JobListingController::class, 'send_email'])->name('job_enquery_form');
 
-
+Route::get('company-listing', [CompanyListingController::class, 'index'])->name('company_listing');
+// Route::get('company/{id}', [CompanyListingController::class, 'detail'])->name('company');
+// Route::post('company/enquery/email', [CompanyListingController::class, 'send_email'])->name('company_enquery_form');
 
 // company signup and login
 Route::post('company_signup_submit', [SignupController::class, 'company_signup_submit'])->name('company_signup_submit');
@@ -59,7 +66,6 @@ Route::get('forget_password_company', [ForgetPasswordController::class, 'company
 Route::post('company_forget_password/submit', [ForgetPasswordController::class, 'company_forget_password_submit'])->name('company_forget_password_submit');
 Route::get('reset-password/company/{token}/{email}', [ForgetPasswordController::class, 'company_reset_password'])->name('company_reset_password');
 Route::post('company-reset-password-submit', [ForgetPasswordController::class, 'company_reset_password_submit'])->name('company_reset_password_submit');
-
 
 // candidate
 Route::post('candidate_signup_submit', [SignupController::class, 'candidate_signup_submit'])->name('candidate_signup_submit');
@@ -84,13 +90,29 @@ Route::middleware(['candidate:candidate'])->group(function () {
     Route::get('/candidate/education/edit/{id}', [CandidateController::class, 'edit'])->name('candidate_education_edit');
     Route::post('/candidate/education/update{id}/', [CandidateController::class, 'update'])->name('candidate_education_update');
     Route::get('/candidate/education/delete/{id}', [CandidateController::class, 'delete'])->name('candidate_education_delete');
-
     Route::get('/candidate/skill/view', [CandidateController::class, 'skill'])->name('candidate_skill');
     Route::get('/candidate/skill/add', [CandidateController::class, 'skill_add_section'])->name('candidate_skill_add');
     Route::post('/candidate/skill/store', [CandidateController::class, 'skill_store'])->name('candidate_skill_store');
     Route::get('/candidate/skill/edit/{id}', [CandidateController::class, 'skill_edit'])->name('candidate_skill_edit');
     Route::post('/candidate/skill/update{id}/', [CandidateController::class, 'skill_update'])->name('candidate_skill_update');
     Route::get('/candidate/skill/delete/{id}', [CandidateController::class, 'skill_delete'])->name('candidate_skill_delete');
+
+    Route::get('/candidate/work-experience/view', [CandidateController::class, 'work_experience'])->name('candidate_work_experience');
+    Route::get('/candidate/work-experience/add', [CandidateController::class, 'work_experience_add_section'])->name('candidate_work_experience_add');
+    Route::post('/candidate/work-experience/store', [CandidateController::class, 'work_experience_store'])->name('candidate_work_experience_store');
+    Route::get('/candidate/work-experience/edit/{id}', [CandidateController::class, 'work_experience_edit'])->name('candidate_work_experience_edit');
+    Route::post('/candidate/work-experience/update{id}/', [CandidateController::class, 'work_experience_update'])->name('candidate_work_experience_update');
+    Route::get('/candidate/work-experience/delete/{id}', [CandidateController::class, 'work_experience_delete'])->name('candidate_work_experience_delete');
+
+    Route::get('/candidate/resume/view', [CandidateController::class, 'resume'])->name('candidate_resume');
+    Route::get('/candidate/resume/add', [CandidateController::class, 'resume_add_section'])->name('candidate_resume_add');
+    Route::post('/candidate/resume/store', [CandidateController::class, 'resume_store'])->name('candidate_resume_store');
+    Route::get('/candidate/resume/edit/{id}', [CandidateController::class, 'resume_edit'])->name('candidate_resume_edit');
+    Route::post('/candidate/resume/update{id}/', [CandidateController::class, 'resume_update'])->name('candidate_resume_update');
+    Route::get('/candidate/resume/delete/{id}', [CandidateController::class, 'resume_delete'])->name('candidate_resume_delete');
+    Route::get('/candidate/apply/{id}', [CandidateController::class, 'apply'])->name('candidate_apply');
+    Route::post('/candidate/apply-submit/{id}', [CandidateController::class, 'apply_submit'])->name('candidate_apply_submit');
+    Route::get('/candidate/application', [CandidateController::class, 'application'])->name('candidate_application');
 });
 
 // company middleware
@@ -120,6 +142,10 @@ Route::middleware(['company:company'])->group(function () {
     Route::get('/company/job-edit/{id}', [CompanyController::class, 'edit_jobs'])->name('company_jobs_edit');
     Route::post('/company/job-update/{id}', [CompanyController::class, 'jobs_update'])->name('company_jobs_update');
     Route::get('/company/job-delete/{id}', [CompanyController::class, 'jobs_delete'])->name('company_jobs_delete');
+    Route::get('/company/candidate-applications', [CompanyController::class, 'candidate_applications'])->name('company_candidate_applications');
+    Route::get('/company/applicants/{id}', [CompanyController::class, 'applicants'])->name('company_applicants');
+    Route::get('/company/applicants-resume/{id}', [CompanyController::class, 'applicant_resume'])->name('company_applicant_resume');
+    Route::post('/company/applicants-status-change', [CompanyController::class, 'applicant_status'])->name('company_applicant_status_change');
 });
 
 /*Admin route*/

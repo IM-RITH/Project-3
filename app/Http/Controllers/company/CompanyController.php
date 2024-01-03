@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Company;
 
 use App\Http\Controllers\Controller;
+use App\Models\CandidateApplication;
 use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\Package;
@@ -19,6 +20,11 @@ use App\Models\JobGender;
 use App\Models\JobSalaryRange;
 use App\Models\JobExperience;
 use App\Models\Job;
+use App\Models\Candidate;
+use App\Models\CandidateEducation;
+use App\Models\CandidateResume;
+use App\Models\CandidateSkill;
+use App\Models\CandidateWorkExperience;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -139,7 +145,7 @@ class CompanyController extends Controller
             }
 
             $ext = $request->file('logo')->extension();
-            $final_name = 'company_logo' . '.' . $ext;
+            $final_name = 'company_logo' . time() . '.' . $ext;
             $request->file('logo')->move(public_path('uploads/'), $final_name);
             $obj->logo = $final_name;
         }
@@ -210,6 +216,11 @@ class CompanyController extends Controller
                 ->back()
                 ->with('error', 'Your current package does not allow to post anymore!');
         }
+        if (date('Y-m-d') > $order_data->expire_date) {
+            return redirect()
+                ->back()
+                ->with('error', 'Your current package has expired!');
+        }
 
         $request->validate([
             'photo' => 'required|mimes:jpg,jpeg,png,gif',
@@ -269,6 +280,11 @@ class CompanyController extends Controller
                 ->back()
                 ->with('error', 'Your current package does not allow to post anymore!');
         }
+        if (date('Y-m-d') > $order_data->expire_date) {
+            return redirect()
+                ->back()
+                ->with('error', 'Your current package has expired!');
+        }
 
         $request->validate([
             'video_id' => 'required',
@@ -319,6 +335,12 @@ class CompanyController extends Controller
             return redirect()
                 ->back()
                 ->with('error', 'You must buy a package first and then the system will allow you to access this section');
+        }
+
+        if (date('Y-m-d') > $order_data->expire_date) {
+            return redirect()
+                ->back()
+                ->with('error', 'Your current package has expired!');
         }
         $package_data = Package::where('id', $order_data->package_id)->first();
         if ($package_data->total_allowed_jobs == 0) {
@@ -441,5 +463,33 @@ class CompanyController extends Controller
     {
         Job::find($id)->delete();
         return redirect()->route('company_jobs')->with('success', 'Job Deleted Successfully');
+    }
+    public function candidate_applications()
+    {
+        $jobs = Job::with('rJobCategory', 'rJobLocation', 'rJobType', 'rJobGender', 'rJobExperience', 'rJobSalaryRange')->where('company_id', Auth::guard('company')->user()->id)->get();
+        return view('company.candidate_applications', compact('jobs'));
+    }
+
+    public function applicants($id)
+    {
+        $applicants = CandidateApplication::with('rCandidate')->where('job_id', $id)->get();
+        $job_single = Job::where('id', $id)->first();
+        return view('company.applicants', compact('applicants', 'job_single'));
+    }
+    public function applicant_resume($id)
+    {
+        $candidate_single = Candidate::where('id', $id)->first();
+        $candidate_education = CandidateEducation::where('candidate_id', $id)->get();
+        $candidate_skill = CandidateSkill::where('candidate_id', $id)->get();
+        $candidate_experience = CandidateWorkExperience::where('candidate_id', $id)->get();
+        $candidate_resume = CandidateResume::where('candidate_id', $id)->get();
+        return view('company.applicant_resume', compact('candidate_single', 'candidate_education', 'candidate_skill', 'candidate_experience', 'candidate_resume'));
+    }
+    public function applicant_status(Request $request)
+    {
+        $obj = CandidateApplication::where('candidate_id', $request->candidate_id)->where('job_id', $request->job_id)->first();
+        $obj->status = $request->status;
+        $obj->update();
+        return redirect()->back()->with('success', 'Applicant status updated successfully');
     }
 }

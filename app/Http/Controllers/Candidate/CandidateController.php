@@ -3,19 +3,33 @@
 namespace App\Http\Controllers\Candidate;
 
 use App\Http\Controllers\Controller;
+use App\Mail\Websitemail;
 use Illuminate\Http\Request;
 use App\Models\Candidate;
 use App\Models\CandidateEducation;
 use App\Models\CandidateSkill;
+use App\Models\CandidateWorkExperience;
+use App\Models\CandidateResume;
+use App\Models\Job;
+use App\Models\CandidateApplication;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\Mail;
 
 class CandidateController extends Controller
 {
     public function dashboard()
     {
-        return view('candidate.dashboard');
+        $total_applied_job = 0;
+        $total_approved_job = 0;
+        $total_rejected_job = 0;
+
+        $total_applied_job = CandidateApplication::where('candidate_id', Auth::guard('candidate')->user()->id)->where('status', 'Applied')->count();
+        $total_rejected_job = CandidateApplication::where('candidate_id', Auth::guard('candidate')->user()->id)->where('status', 'Rejected')->count();
+        $total_approved_job = CandidateApplication::where('candidate_id', Auth::guard('candidate')->user()->id)->where('status', 'Approved')->count();
+
+        return view('candidate.dashboard', compact('total_applied_job', 'total_rejected_job', 'total_approved_job'));
     }
     public function edit_profile()
     {
@@ -118,7 +132,7 @@ class CandidateController extends Controller
     }
     public function update(Request $request, $id)
     {
-        $obj =  CandidateEducation::where('id', $id)->first();
+        $obj = CandidateEducation::where('id', $id)->first();
         $request->validate([
             'level' => 'required',
             'institute' => 'required',
@@ -176,7 +190,7 @@ class CandidateController extends Controller
     }
     public function skill_update(Request $request, $id)
     {
-        $obj =  CandidateSkill::where('id', $id)->first();
+        $obj = CandidateSkill::where('id', $id)->first();
         $request->validate([
             'name' => 'required',
             'percentage' => 'required',
@@ -194,5 +208,170 @@ class CandidateController extends Controller
         return redirect()
             ->route('candidate_skill')
             ->with('success', 'Your Education is deleted successfully');
+    }
+
+    // candidate work experience section
+    public function work_experience()
+    {
+        $work_experiences = CandidateWorkExperience::where('candidate_id', Auth::guard('candidate')->user()->id)->get();
+        return view('candidate.work_experience', compact('work_experiences'));
+    }
+
+    public function work_experience_add_section()
+    {
+        return view('candidate.work_experience_add');
+    }
+    public function work_experience_store(Request $request)
+    {
+        $request->validate([
+            'company' => 'required',
+            'designation' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+        ]);
+
+        $obj = new CandidateWorkExperience();
+        $obj->candidate_id = Auth::guard('candidate')->user()->id;
+        $obj->company = $request->company;
+        $obj->designation = $request->designation;
+        $obj->start_date = $request->start_date;
+        $obj->end_date = $request->end_date;
+        $obj->save();
+        return redirect()
+            ->route('candidate_work_experience')
+            ->with('success', 'Your Work Experience is added successfully');
+    }
+    public function work_experience_edit($id)
+    {
+        $work_experience_single = CandidateWorkExperience::where('id', $id)->first();
+        return view('candidate.work_experience_edit', compact('work_experience_single'));
+    }
+    public function work_experience_update(Request $request, $id)
+    {
+        $obj = CandidateWorkExperience::where('id', $id)->first();
+        $request->validate([
+            'company' => 'required',
+            'designation' => 'required',
+            'start_date' => 'required',
+            'end_date' => 'required',
+        ]);
+        $obj->company = $request->company;
+        $obj->designation = $request->designation;
+        $obj->start_date = $request->start_date;
+        $obj->end_date = $request->end_date;
+        $obj->update();
+        return redirect()
+            ->route('candidate_work_experience')
+            ->with('success', 'Your Work Experience is updated successfully');
+    }
+    public function work_experience_delete($id)
+    {
+        CandidateWorkExperience::where('id', $id)->delete();
+        return redirect()
+            ->route('candidate_work_experience')
+            ->with('success', 'Your Work Experience is deleted successfully');
+    }
+
+    // candidate resume section
+    public function resume()
+    {
+        $resumes = CandidateResume::where('candidate_id', Auth::guard('candidate')->user()->id)->get();
+        return view('candidate.resume', compact('resumes'));
+    }
+
+    public function resume_add_section()
+    {
+        return view('candidate.resume_add');
+    }
+    public function resume_store(Request $request)
+    {
+        $request->validate([
+            'name' => 'required',
+            'file' => 'required|mimes:pdf,docx, doc, xls, xlsx, ppt, pptx',
+        ]);
+        $ext = $request->file('file')->extension();
+        $filename = 'candidate_resume' . time() . '.' . $ext;
+        $request->file('file')->move(public_path('uploads/candidate_resume'), $filename);
+        $obj = new CandidateResume();
+        $obj->candidate_id = Auth::guard('candidate')->user()->id;
+        $obj->name = $request->name;
+        $obj->file = $filename;
+        $obj->save();
+        return redirect()
+            ->route('candidate_resume')
+            ->with('success', 'Your Resume is added successfully');
+    }
+    public function resume_edit($id)
+    {
+        $resume_single = CandidateResume::where('id', $id)->first();
+        return view('candidate.resume_edit', compact('resume_single'));
+    }
+    public function resume_update(Request $request, $id)
+    {
+        $obj = CandidateResume::where('id', $id)->first();
+        $request->validate([
+            'name' => 'required',
+            'file' => 'required|mimes:pdf,docx, doc, xls, xlsx, ppt, pptx',
+        ]);
+        $ext = $request->file('file')->extension();
+        $filename = 'candidate_resume' . time() . '.' . $ext;
+        $request->file('file')->move(public_path('uploads/candidate_resume'), $filename);
+        $obj->name = $request->name;
+        $obj->file = $filename;
+        $obj->update();
+        return redirect()
+            ->route('candidate_resume')
+            ->with('success', 'Your Resume is updated successfully');
+    }
+    public function resume_delete($id)
+    {
+        CandidateResume::where('id', $id)->delete();
+        return redirect()
+            ->route('candidate_resume')
+            ->with('success', 'Your Resume is deleted successfully');
+    }
+
+    // candidate apply section
+    public function apply($id)
+    {
+        $existing_apply_check = CandidateApplication::where('candidate_id', Auth::guard('candidate')->user()->id)
+            ->where('job_id', $id)
+            ->count();
+        if ($existing_apply_check > 0) {
+            return redirect()
+                ->back()
+                ->with('error', 'You have already applied for this job');
+        }
+        $job_single = Job::where('id', $id)->first();
+        return view('candidate.apply', compact('job_single'));
+    }
+    public function apply_submit(Request $request, $id)
+    {
+        $request->validate([
+            'cover_letter' => 'required',
+        ]);
+        $obj = new CandidateApplication();
+        $obj->candidate_id = Auth::guard('candidate')->user()->id;
+        $obj->job_id = $id;
+        $obj->cover_letter = $request->cover_letter;
+        $obj->status = 'Applied';
+        $obj->save();
+
+        $job_info = Job::with('rCompany')->where('id', $id)->first();
+        $company_email = $job_info->rCompany->email;
+
+        // sending email to company
+        $link = route('company_applicants', $id);
+        $subject = 'Applied Job';
+        $message = 'Please check the application link below: <a href="' . $link . '">Click Here</a>';
+        Mail::to($company_email)->send(new Websitemail($subject, $message));
+        return redirect()
+            ->route('job', $id)
+            ->with('success', 'You have applied for this job');
+    }
+    public function application()
+    {
+        $applied_job = CandidateApplication::with('rJob')->where('candidate_id', Auth::guard('candidate')->user()->id)->get();
+        return view('candidate.application',  compact('applied_job'));
     }
 }
