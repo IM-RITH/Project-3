@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminCandidateController;
+use App\Http\Controllers\Admin\AdminCompanyController;
 use App\Http\Controllers\Admin\AdminCompanyIndustryController;
 use App\Http\Controllers\Admin\AdminCompanyLocationController;
 use App\Http\Controllers\Admin\AdminCompanySizeController;
@@ -278,4 +280,18 @@ Route::middleware(['admin:admin'])->group(function () {
     Route::get('/admin/package/edit/{id}', [AdminPackageController::class, 'edit'])->name('admin_package_item_edit');
     Route::post('/admin/package/update{id}/', [AdminPackageController::class, 'update'])->name('admin_package_item_update');
     Route::get('/admin/package/delete/{id}', [AdminPackageController::class, 'delete'])->name('admin_package_item_delete');
+
+    // company profile controller
+    Route::get('/admin/companies', [AdminCompanyController::class, 'index'])->name('admin_companies');
+    Route::get('/admin/companies-detail/{id}', [AdminCompanyController::class, 'companies_detail'])->name('admin_companies_detail');
+    Route::get('/admin/companies-jobs/{id}', [AdminCompanyController::class, 'companies_jobs'])->name('admin_companies_jobs');
+    Route::get('/admin/companies-applicants/{id}', [AdminCompanyController::class, 'companies_applicants'])->name('admin_companies_applicants');
+    Route::get('/admin/companies-applicant-resume/{id}', [AdminCompanyController::class, 'companies_applicant_resume'])->name('admin_companies_applicant_resume');
+    Route::get('/admin/companies-delete/{id}', [AdminCompanyController::class, 'delete'])->name('admin_companies_delete');
+
+    // candidate data 
+    Route::get('/admin/candidates', [AdminCandidateController::class, 'index'])->name('admin_candidates');
+    Route::get('/admin/candidates-detail/{id}', [AdminCandidateController::class, 'candidates_detail'])->name('admin_candidates_detail');
+    Route::get('/admin/candidates-delete/{id}', [AdminCandidateController::class, 'delete'])->name('admin_candidates_delete');
+    Route::get('/admin/candidates-applied-job/{id}', [AdminCandidateController::class, 'candidates_applied_job'])->name('admin_candidates_applied_job');
 });

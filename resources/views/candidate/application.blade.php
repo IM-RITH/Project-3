@@ -32,19 +32,21 @@
                                     <th>Status</th>
                                 </tr>
                                 @php
-                                    $i=0;
+                                    $i = 0;
                                 @endphp
                                 @foreach ($applied_job as $item)
-                                @php
-                                    $i++;
-                                @endphp
+                                    @php
+                                        $i++;
+                                    @endphp
                                     <tr>
                                         <td>{{ $loop->iteration }}</td>
                                         <td>
-                                            {{ $item->rJob->title }}
+                                            {{ optional($item->rJob)->title }}
                                         </td>
+
                                         <td>
-                                            {{ $item->rJob->rCompany->company_name }}
+                                            {{ optional(optional($item->rJob)->rCompany)->company_name }}
+
                                         </td>
                                         <td>
                                             <a href="" class="btn btn-warning"data-bs-toggle="modal"

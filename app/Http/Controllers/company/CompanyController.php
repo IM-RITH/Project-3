@@ -380,14 +380,50 @@ class CompanyController extends Controller
 
         $package_data = Package::where('id', $order_data->package_id)->first();
 
-        $total_featured_job_posted = Job::where('company_id', Auth::guard('company')->user()->id)->count();
-        if ($total_featured_job_posted == $package_data->total_allowed_featured_jobs) {
-            if ($request->is_featured == 1) {
-                return redirect()
-                    ->back()
-                    ->with('error', 'You aleady have added the total number of featured jobs!');
-            }
-        }
+        // $total_featured_job_posted = Job::where('company_id', Auth::guard('company')->user()->id)->count();
+        $total_featured_job_posted = Job::where('company_id', Auth::guard('company')->user()->id)
+            ->where('is_featured', 1)
+            ->count();
+
+
+        // not yet xu ly
+        // if ($total_featured_job_posted >= $package_data->total_allowed_featured_jobs) {
+        //     if ($request->is_featured == 1) {
+        //         return redirect()
+        //             ->back()
+        //             ->with('error', 'You aleady have added the total number of featured jobs!');
+        //     }
+        // }
+
+        // $request->validate([
+        //     'title' => 'required',
+        //     'description' => 'required',
+        //     'deadline' => 'required',
+        //     'vacancy' => 'required',
+        // ]);
+
+        // // Retrieve the active order for the company
+        // $order_data = Order::where('company_id', Auth::guard('company')->user()->id)
+        //     ->where('currently_active', 1)
+        //     ->firstOrFail(); // Using firstOrFail() to ensure an order is found, or throw an exception
+
+        // // Retrieve the package data from the active order
+        // $package_data = Package::findOrFail($order_data->package_id); // Using findOrFail() to ensure a package is found
+
+        // // Count the total featured job posts by the company
+        // $total_featured_job_posted = Job::where('company_id', Auth::guard('company')->user()->id)
+        //     ->where('is_featured', 1)
+        //     ->count();
+
+        // // Check if the company has reached the limit of featured job posts
+        // if (
+        //     $request->has('is_featured') && $request->is_featured == 1 && $total_featured_job_posted >= $package_data->total_allowed_featured_jobs
+        // ) {
+        //     return redirect()
+        //         ->back()
+        //         ->with('error', 'You have already added the total number of featured jobs allowed for your plan.');
+        // }
+
         $obj = new Job();
         $obj->company_id = Auth::guard('company')->user()->id;
         $obj->title = $request->title;
